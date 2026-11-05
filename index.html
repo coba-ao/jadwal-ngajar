@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>📚 Jadwal Ngajar</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  :root{
+    --bg:#f1f5f9; --card:#ffffff; --card2:#f8fafc; --border:#e2e8f0;
+    --text:#1e293b; --muted:#64748b; --accent:#2563eb; --accent2:#3b82f6;
+    --green:#16a34a; --green-bg:#dcfce7; --red:#dc2626; --red-bg:#fee2e2;
+    --yellow:#ca8a04; --yellow-bg:#fef9c3; --purple:#7c3aed; --purple-bg:#ede9fe;
+  }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--bg);color:var(--text);min-height:100vh;padding:16px;font-size:15px;
+  }
+  .container{max-width:1500px;margin:0 auto}
+
+  header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+  h1{font-size:1.5rem;display:flex;align-items:center;gap:8px;color:var(--text)}
+  .subtitle{font-size:.8rem;color:var(--muted);margin-top:3px}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:10px;margin-bottom:16px}
+  .stat-card{
+    background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:14px;text-align:center;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .stat-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .stat-card .num{font-size:1.5rem;font-weight:800;color:var(--accent);line-height:1;word-break:break-word}
+  .stat-card .lbl{font-size:.7rem;color:var(--muted);margin-top:5px;text-transform:uppercase;letter-spacing:.4px;font-weight:600}
+  .stat-card.green .num{color:var(--green)}
+  .stat-card.yellow .num{color:var(--yellow)}
+  .stat-card.gold .num{color:#b45309}
+  .stat-card.gold{background:linear-gradient(135deg,#fffbeb,#fef3c7);border-color:#fcd34d}
+
+  .bulan-nav{
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;
+    background:var(--card);padding:10px 14px;border-radius:12px;border:1px solid var(--border);
+    flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .bulan-nav button{
+    background:var(--card2);border:1px solid var(--border);color:var(--text);
+    width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:1rem;
+    font-weight:700;transition:.15s;flex-shrink:0;
+  }
+  .bulan-nav button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .bulan-nav .bulan-label{
+    font-size:1.05rem;font-weight:800;color:var(--accent);min-width:170px;text-align:center;
+  }
+  .bulan-nav .bulan-label small{display:block;font-size:.7rem;color:var(--muted);font-weight:400}
+  .bulan-nav select{
+    margin-left:auto;background:var(--card2);border:1px solid var(--border);
+    color:var(--text);padding:8px 12px;border-radius:9px;font-size:.85rem;
+    font-family:inherit;cursor:pointer;font-weight:600;
+  }
+  .bulan-nav .btn-all{
+    padding:8px 13px;font-size:.8rem;border-radius:9px;
+    background:var(--card2);border:1px solid var(--border);color:var(--text);
+    cursor:pointer;font-weight:700;font-family:inherit;
+  }
+  .bulan-nav .btn-all:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+  .tab{
+    padding:8px 14px;border-radius:999px;border:1px solid var(--border);
+    background:var(--card);color:var(--muted);font-size:.83rem;font-weight:700;
+    cursor:pointer;transition:.15s;white-space:nowrap;
+  }
+  .tab:hover{border-color:var(--accent);color:var(--text)}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .tab .cnt{
+    display:inline-block;background:rgba(0,0,0,.1);padding:1px 7px;border-radius:999px;
+    font-size:.7rem;margin-left:5px;
+  }
+  .tab.active .cnt{background:rgba(255,255,255,.25)}
+
+  .toolbar{
+    display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;
+    background:var(--card);padding:11px;border-radius:12px;border:1px solid var(--border);
+    box-shadow:0 1px 3px rgba(0,0,0,.04);
+  }
+  .toolbar input,.toolbar select,.toolbar button{
+    font-family:inherit;font-size:.87rem;padding:9px 12px;border-radius:9px;
+    border:1px solid var(--border);background:var(--card2);color:var(--text);outline:none;
+    font-weight:600;
+  }
+  .toolbar input:focus,.toolbar select:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+  .toolbar input[type=text]{flex:1;min-width:160px}
+  .btn{cursor:pointer;font-weight:700;transition:.15s;border:none;white-space:nowrap;font-family:inherit}
+  .btn-primary{background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff}
+  .btn-primary:hover{filter:brightness(1.08);box-shadow:0 4px 12px rgba(37,99,235,.3)}
+  .btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+  .btn-ghost:hover{background:var(--border)}
+  .btn-danger{background:var(--red);color:#fff}
+  .btn-danger:hover{background:#b91c1c}
+  .btn-success{background:var(--green);color:#fff}
+  .btn-success:hover{background:#15803d}
+  .btn-warn{background:var(--yellow);color:#fff}
+  .btn-warn:hover{background:#a16207}
+  .btn-sm{padding:5px 9px;font-size:.74rem;border-radius:7px}
+
+  .table-wrap{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:1000px}
+  thead{background:var(--card2);position:sticky;top:0;z-index:2}
+  th{
+    text-align:left;padding:12px 10px;font-size:.68rem;text-transform:uppercase;
+    letter-spacing:.5px;color:var(--muted);border-bottom:2px solid var(--border);
+    cursor:pointer;user-select:none;white-space:nowrap;font-weight:800;
+  }
+  th:hover{color:var(--accent)}
+  th .arw{font-size:.6rem;opacity:.7;margin-left:2px}
+  td{padding:10px;border-bottom:1px solid var(--border);vertical-align:middle}
+  tbody tr{transition:.1s}
+  tbody tr:hover{background:var(--card2)}
+  tbody tr.done{background:#f0fdf4}
+  tbody tr.done .kelas{text-decoration:line-through;color:var(--muted)}
+  tbody tr.pindah{background:#fffbeb;opacity:.75}
+  tbody tr.pindah .kelas{text-decoration:line-through;color:var(--muted)}
+  tbody tr.batal{background:#fef2f2;opacity:.6}
+  tbody tr.batal .kelas{text-decoration:line-through;color:var(--muted)}
+  tbody tr.lewat{border-left:3px solid var(--red)}
+
+  .badge{display:inline-block;padding:4px 9px;border-radius:7px;font-size:.72rem;font-weight:800;white-space:nowrap}
+  .b-bic{background:#dbeafe;color:#1e40af}
+  .b-comander{background:#ffedd5;color:#9a3412}
+  .b-kursus{background:#dcfce7;color:#166534}
+  .b-brainup{background:#ede9fe;color:#6d28d9}
+  .b-talenta{background:#fef3c7;color:#92400e}
+  .b-default{background:var(--border);color:var(--muted)}
+
+  .status-tag{display:inline-block;padding:3px 8px;border-radius:6px;font-size:.7rem;font-weight:800;white-space:nowrap}
+  .s-aktif{background:var(--green-bg);color:var(--green)}
+  .s-pindah{background:var(--yellow-bg);color:var(--yellow)}
+  .s-batal{background:var(--red-bg);color:var(--red)}
+
+  .absen-btn{
+    cursor:pointer;border:1px solid var(--border);background:var(--card2);
+    color:var(--muted);padding:6px 11px;border-radius:7px;font-size:.75rem;
+    font-weight:800;white-space:nowrap;transition:.15s;font-family:inherit;
+  }
+  .absen-btn:hover{border-color:var(--accent2)}
+  .absen-btn.done{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+
+  .aksi-group{display:flex;gap:4px;flex-wrap:wrap}
+  .aksi-group .btn{padding:5px 8px;font-size:.72rem}
+
+  .empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .empty .ico{font-size:3.5rem;display:block;margin-bottom:12px;opacity:.5}
+
+  .overlay{
+    position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;
+    align-items:center;justify-content:center;padding:16px;z-index:100;
+    backdrop-filter:blur(4px);
+  }
+  .overlay.active{display:flex}
+  .modal{
+    background:var(--card);border-radius:16px;border:1px solid var(--border);
+    width:100%;max-width:580px;max-height:92vh;overflow-y:auto;padding:24px;
+    animation:pop .18s ease;box-shadow:0 20px 50px rgba(0,0,0,.2);
+  }
+  @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal h2{font-size:1.15rem;margin-bottom:16px;display:flex;align-items:center;gap:8px;color:var(--text)}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .form-grid .full{grid-column:1/-1}
+  label{display:block;font-size:.72rem;color:var(--muted);margin-bottom:5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+  .modal input,.modal select,.modal textarea{
+    width:100%;font-family:inherit;font-size:.9rem;padding:10px 12px;
+    border-radius:9px;border:1px solid var(--border);background:var(--card2);
+    color:var(--text);outline:none;transition:.15s;font-weight:600;
+  }
+  .modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(59,130,246,.12);background:#fff}
+  .modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:20px;flex-wrap:wrap}
+  .hint{font-size:.73rem;color:var(--muted);margin-top:4px;line-height:1.5}
+
+  .gen-list{display:flex;flex-direction:column;gap:8px;margin:14px 0;max-height:340px;overflow-y:auto;padding-right:4px}
+  .gen-item{
+    display:flex;align-items:center;gap:10px;padding:11px 13px;
+    background:var(--card2);border:1px solid var(--border);border-radius:10px;cursor:pointer;
+  }
+  .gen-item:hover{border-color:var(--accent2)}
+  .gen-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+  .gen-item .info{flex:1;min-width:0}
+  .gen-item .nm{font-weight:800;font-size:.86rem}
+  .gen-item .dt{font-size:.73rem;color:var(--muted);margin-top:2px}
+
+  .kelola-list{display:flex;flex-direction:column;gap:8px;margin:14px 0;max-height:300px;overflow-y:auto;padding-right:4px}
+  .kelola-item{
+    display:flex;align-items:center;gap:8px;padding:10px 12px;
+    background:var(--card2);border:1px solid var(--border);border-radius:10px;
+  }
+  .kelola-item .nm{flex:1;font-weight:800;font-size:.86rem}
+  .kelola-item .by{font-size:.76rem;color:var(--accent);font-weight:800;margin-right:6px;white-space:nowrap}
+
+  .add-row{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+  .add-row input{flex:1;min-width:120px}
+
+  .mobile-cards{display:none}
+  @media(max-width:768px){
+    body{padding:10px;font-size:14px}
+    h1{font-size:1.25rem}
+    header{gap:8px}
+    header > div:last-child{width:100%;display:flex;gap:6px;flex-wrap:wrap}
+    header > div:last-child .btn{flex:1;font-size:.78rem;padding:10px 6px;min-width:0}
+    .stats{grid-template-columns:repeat(3,1fr);gap:7px}
+    .stat-card{padding:10px 6px}
+    .stat-card .num{font-size:1.15rem}
+    .stat-card .lbl{font-size:.6rem}
+    .stat-card.gold{grid-column:1/-1}
+    .stat-card.gold .num{font-size:1.3rem}
+    .bulan-nav{padding:8px 10px;gap:6px}
+    .bulan-nav .bulan-label{font-size:.92rem;min-width:auto;flex:1}
+    .bulan-nav select{margin-left:0;width:100%;order:10;font-size:.8rem;padding:8px}
+    .bulan-nav button{width:32px;height:32px;font-size:.9rem}
+    .bulan-nav .btn-all{font-size:.74rem;padding:7px 10px}
+    .tab{padding:7px 11px;font-size:.76rem}
+    .toolbar{padding:9px;gap:6px}
+    .toolbar input[type=text]{min-width:100%;flex:1 0 100%;order:-1;font-size:.85rem}
+    .toolbar select,.toolbar button{flex:1;font-size:.78rem;padding:8px 6px;min-width:0}
+    .form-grid{grid-template-columns:1fr}
+    .modal{padding:18px;border-radius:14px}
+    .modal h2{font-size:1.05rem}
+    .modal-actions{flex-direction:column-reverse;gap:7px}
+    .modal-actions .btn{width:100%;padding:12px}
+    .gen-item{padding:9px 11px}
+    .gen-item .nm{font-size:.8rem}
+    .gen-item .dt{font-size:.7rem}
+    .table-wrap{display:none}
+    .mobile-cards{display:flex;flex-direction:column;gap:10px}
+    .m-card{
+      background:var(--card);border:1px solid var(--border);border-radius:12px;
+      padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:.15s;
+    }
+    .m-card.done{background:#f0fdf4;border-color:#86efac}
+    .m-card.pindah{background:#fffbeb;border-color:#fcd34d;opacity:.8}
+    .m-card.batal{background:#fef2f2;border-color:#fca5a5;opacity:.7}
+    .m-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+    .m-card-tgl{font-weight:800;font-size:.92rem;color:var(--text)}
+    .m-card-jam{font-size:.75rem;color:var(--muted);font-weight:700;margin-top:2px}
+    .m-card-kelas{font-size:.82rem;font-weight:700;margin-bottom:6px;line-height:1.35}
+    .m-card.done .m-card-kelas,.m-card.pindah .m-card-kelas,.m-card.batal .m-card-kelas{text-decoration:line-through;color:var(--muted)}
+    .m-card-meta{display:flex;flex-wrap:wrap;gap:5px;font-size:.73rem;color:var(--muted);margin-bottom:8px}
+    .m-card-meta span{background:var(--card2);padding:3px 7px;border-radius:5px;font-weight:600}
+    .m-card-meta .biaya{background:var(--yellow-bg);color:var(--yellow);font-weight:800}
+    .m-card-actions{display:flex;gap:5px;flex-wrap:wrap}
+    .m-card-actions .btn{flex:1;font-size:.76rem;padding:8px 6px;min-width:0}
+    .m-card-actions .absen-btn{flex:1;padding:8px 6px;font-size:.76rem}
+  }
+  @media(max-width:400px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .m-card-actions .btn{font-size:.7rem;padding:7px 4px}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>📚 Jadwal Ngajar</h1>
+      <div class="subtitle" id="subtitle">Absen = pembayaran masuk • Pindah/Batal = tercatat</div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-ghost" id="btnKelola">⚙️ Kelola</button>
+      <button class="btn btn-ghost" id="btnRutin">🔁 Rutin</button>
+      <button class="btn btn-primary" id="btnTambah">+ Tambah</button>
+    </div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="bulan-nav">
+    <button id="btnPrevBulan" title="Bulan sebelumnya">◀</button>
+    <div class="bulan-label" id="bulanLabel">—</div>
+    <button id="btnNextBulan" title="Bulan berikutnya">▶</button>
+    <select id="selectBulan"></select>
+    <button class="btn-all" id="btnSemuaBulan">📋 Semua</button>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="toolbar">
+    <input type="text" id="search" placeholder="🔍 Cari kelas, siswa, catatan...">
+    <select id="filterAbsen">
+      <option value="">Semua Status</option>
+      <option value="belum">⬜ Belum bayar</option>
+      <option value="sudah">✅ Sudah bayar</option>
+      <option value="pindah">📅 Pindah</option>
+      <option value="batal">❌ Batal</option>
+    </select>
+    <select id="filterWaktu">
+      <option value="">Semua Waktu</option>
+      <option value="mendatang">📅 Mendatang</option>
+      <option value="lewat">⏰ Lewat</option>
+    </select>
+    <button class="btn btn-ghost" id="btnExport">⬇ Export</button>
+    <button class="btn btn-ghost" id="btnImport">⬆ Import</button>
+    <input type="file" id="fileImport" accept=".json" style="display:none">
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th data-sort="tanggal">Tanggal <span class="arw"></span></th>
+          <th data-sort="jamMulai">Jam <span class="arw"></span></th>
+          <th data-sort="bimbel">Bimbel <span class="arw"></span></th>
+          <th data-sort="kelas">Kelas/Grup <span class="arw"></span></th>
+          <th data-sort="siswa">Siswa <span class="arw"></span></th>
+          <th data-sort="status">Status <span class="arw"></span></th>
+          <th data-sort="biaya">Biaya <span class="arw"></span></th>
+          <th>Bayar</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">
+      <span class="ico">📭</span>
+      Belum ada jadwal di bulan/tab ini.<br>
+      Klik <b>+ Tambah</b> atau <b>🔁 Rutin</b>.
+    </div>
+  </div>
+
+  <div class="mobile-cards" id="mobileCards"></div>
+  <div class="empty" id="emptyMobile" style="display:none">
+    <span class="ico">📭</span>
+    Belum ada jadwal di bulan/tab ini.
+  </div>
+</div>
+
+<!-- MODAL FORM -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2 id="modalTitle">➕ Tambah Jadwal</h2>
+    <form id="formJadwal">
+      <input type="hidden" id="editId">
+      <div class="form-grid">
+        <div class="full">
+          <label>📅 Tanggal</label>
+          <input type="date" id="fTanggal" required>
+        </div>
+        <div>
+          <label>🕐 Jam Mulai</label>
+          <input type="time" id="fJamMulai" required>
+        </div>
+        <div>
+          <label>🕐 Jam Selesai</label>
+          <input type="time" id="fJamSelesai">
+        </div>
+        <div>
+          <label>🏢 Bimbel</label>
+          <select id="fBimbel" required></select>
+        </div>
+        <div>
+          <label>📍 Tempat</label>
+          <select id="fTempat">
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+          </select>
+        </div>
+        <div class="full">
+          <label>📖 Kelas / Grup</label>
+          <input type="text" id="fKelas" placeholder="cth: Sa'id bin Zaid (Kls 8) — Mtk 1">
+        </div>
+        <div class="full">
+          <label>👤 Nama Siswa (opsional)</label>
+          <input type="text" id="fSiswa" placeholder="cth: Bilal, Raisa">
+        </div>
+        <div class="full">
+          <label>💰 Biaya</label>
+          <input type="text" id="fBiaya" placeholder="cth: 150000">
+        </div>
+        <div class="full">
+          <label>📝 Catatan / Materi (opsional)</label>
+          <textarea id="fCatatan" rows="2" placeholder="topik, PR, dll"></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="btnBatal">Batal</button>
+        <button type="submit" class="btn btn-primary">💾 Simpan</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL PINDAH -->
+<div class="overlay" id="overlayPindah">
+  <div class="modal">
+    <h2>📅 Pindah Jadwal</h2>
+    <p class="hint" style="margin-bottom:14px">Jadwal lama ditandai <b>Pindah</b>, dibuat jadwal pengganti di tanggal & jam baru. Biaya ikut pindah, status bayar di-reset.</p>
+    <div class="form-grid">
+      <div class="full">
+        <label>📅 Tanggal Baru</label>
+        <input type="date" id="pTanggal" required>
+      </div>
+      <div>
+        <label>🕐 Jam Mulai Baru</label>
+        <input type="time" id="pJamMulai" required>
+      </div>
+      <div>
+        <label>🕐 Jam Selesai Baru</label>
+        <input type="time" id="pJamSelesai">
+      </div>
+      <div class="full">
+        <label>📝 Alasan pindah (opsional)</label>
+        <input type="text" id="pAlasan" placeholder="cth: siswa sakit, minta ganti hari">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="btnPindahBatal">Batal</button>
+      <button type="button" class="btn btn-warn" id="btnPindahGo">📅 Pindahkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GENERATE RUTIN -->
+<div class="overlay" id="overlayRutin">
+  <div class="modal">
+    <h2>🔁 Generate Jadwal Rutin</h2>
+    <p class="hint" style="margin-bottom:12px">Pilih kelas rutin & rentang bulan. Bisa generate kapan aja, termasuk setelah Nov 2027. Duplikat dilewati.</p>
+    <div class="form-grid" style="margin-bottom:12px">
+      <div>
+        <label>📅 Dari Bulan</label>
+        <input type="month" id="genDari" required>
+      </div>
+      <div>
+        <label>📅 Sampai Bulan</label>
+        <input type="month" id="genSampai" required>
+      </div>
+    </div>
+    <div class="gen-list" id="genList"></div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-ghost" id="btnRutinBatal">Batal</button>
+      <button type="button" class="btn btn-primary" id="btnRutinGo">🚀 Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL KELOLA BIMBEL -->
+<div class="overlay" id="overlayKelola">
+  <div class="modal">
+    <h2>⚙️ Kelola Bimbel</h2>
+    <p class="hint" style="margin-bottom:12px">Tambah/edit/hapus bimbel. Biaya default dipakai buat auto-isi form.</p>
+    <div class="kelola-list" id="kelolaList"></div>
+    <div class="add-row">
+      <input type="text" id="newBimbel" placeholder="Nama bimbel baru...">
+      <button class="btn btn-primary" id="btnAddBimbel">+ Tambah</button>
+    </div>
+    <div class="modal-actions" style="margin-top:18px">
+      <button type="button" class="btn btn-ghost" id="btnKelolaTutup">Tutup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='jadwal_ngajar_v6';
+const STORAGE_BIMBEL='jadwal_bimbel_v6';
+
+let data=[];
+let bimbelList=[];
+let activeTab='Semua', sortKey='tanggal', sortDir='asc';
+let activeBulan=null;
+let pindahTargetId=null;
+
+const HARI=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const BULAN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+const seedBIC=[
+  ['2026-08-24','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 1",'','150000'],
+  ['2026-08-31','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 2",'','150000'],
+  ['2026-09-07','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 3",'','150000'],
+  ['2026-10-05','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 4",'','150000'],
+  ['2026-10-12','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 5",'','150000'],
+  ['2026-11-02','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 6",'','150000'],
+  ['2026-11-09','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 7",'','150000'],
+  ['2026-11-16','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 8",'','150000'],
+  ['2026-12-07','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 9",'','150000'],
+  ['2026-12-21','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 10",'','150000'],
+  ['2026-12-28','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 11",'','150000'],
+  ['2027-01-18','16:00','17:30',"Sa'id bin Zaid (Kls 8) — Mtk 12",'','150000'],
+  ['2026-08-29','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 1','Bilal','150000'],
+  ['2026-09-05','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 2','','150000'],
+  ['2026-09-26','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 3','','150000'],
+  ['2026-10-10','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 4','','150000'],
+  ['2026-10-17','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 5','','150000'],
+  ['2026-11-07','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 6','','150000'],
+  ['2026-11-14','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 7','','150000'],
+  ['2026-11-21','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 8','','150000'],
+  ['2026-12-12','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 9','','150000'],
+  ['2026-12-26','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 10','','150000'],
+  ['2027-01-02','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 11','','150000'],
+  ['2027-01-23','09:00','10:30','Umar bin Al-Khaththab (Kls 9) — Mtk 12','','150000'],
+  ['2026-08-26','16:00','17:30','Sudirman (Kls 6) — Mtk 1','Raisa','90000'],
+  ['2026-09-02','16:00','17:30','Sudirman (Kls 6) — Mtk 2','','90000'],
+  ['2026-09-16','16:00','17:30','Sudirman (Kls 6) — Mtk 3','','90000'],
+  ['2026-10-07','16:00','17:30','Sudirman (Kls 6) — Mtk 4','','90000'],
+  ['2026-10-14','16:00','17:30','Sudirman (Kls 6) — Mtk 5','','90000'],
+  ['2026-10-28','16:00','17:30','Sudirman (Kls 6) — Mtk 6','','90000'],
+  ['2026-11-11','16:00','17:30','Sudirman (Kls 6) — Mtk 7','','90000'],
+  ['2026-11-18','16:00','17:30','Sudirman (Kls 6) — Mtk 8','','90000'],
+  ['2026-12-02','16:00','17:30','Sudirman (Kls 6) — Mtk 9','','90000'],
+  ['2026-12-23','16:00','17:30','Sudirman (Kls 6) — Mtk 10','','90000'],
+  ['2027-01-06','16:00','17:30','Sudirman (Kls 6) — Mtk 11','','90000'],
+  ['2027-01-13','16:00','17:30','Sudirman (Kls 6) — Mtk 12','','90000'],
+];
+
+const defaultBimbel=[
+  {nama:'BIC',biaya:''},
+  {nama:'Comander',biaya:'150000'},
+  {nama:'Kursus Pintar',biaya:'150000'},
+  {nama:'Brainup',biaya:''},
+  {nama:'Talenta',biaya:'100000'},
+  {nama:'Lainnya',biaya:''},
+];
+
+const RUTIN=[
+  {bimbel:'Comander',kelas:'Comander — Kelas Rutin',hari:6,jamMulai:'08:00',jamSelesai:'10:00',tempat:'Offline',biaya:'150000'},
+  {bimbel:'Kursus Pintar',kelas:'Kursus Pintar — Kelas Syauqi',hari:1,jamMulai:'19:00',jamSelesai:'20:30',tempat:'Offline',biaya:'150000'},
+  {bimbel:'Kursus Pintar',kelas:'Kursus Pintar — Kelas Syauqi',hari:4,jamMulai:'19:00',jamSelesai:'20:30',tempat:'Offline',biaya:'150000'},
+  {bimbel:'Brainup',kelas:'Brainup — Kelas Al',hari:2,jamMulai:'15:00',jamSelesai:'16:30',tempat:'Offline',biaya:'70000'},
+  {bimbel:'Brainup',kelas:'Brainup — Kelas Intan',hari:2,jamMulai:'19:00',jamSelesai:'20:30',tempat:'Offline',biaya:'120000'},
+  {bimbel:'Brainup',kelas:'Brainup — Kelas Feby',hari:3,jamMulai:'19:00',jamSelesai:'20:30',tempat:'Offline',biaya:'60000'},
+  {bimbel:'Talenta',kelas:'Talenta — Kelas Rutin',hari:5,jamMulai:'16:00',jamSelesai:'17:30',tempat:'Offline',biaya:'100000'},
+];
+
+const MULAI_RUTIN='2026-11';
+const AKHIR_RUTIN_DEFAULT='2027-11';
+
+function uid(){return 'j_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)}
+function load(){
+  const rb=localStorage.getItem(STORAGE_BIMBEL);
+  if(rb){try{bimbelList=JSON.parse(rb)}catch(e){bimbelList=defaultBimbel.slice()}}
+  if(!bimbelList.length)bimbelList=defaultBimbel.slice();
+
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(raw){try{data=JSON.parse(raw)}catch(e){data=[]}}
+  if(!data.length){
+    data=seedBIC.map(s=>({
+      id:uid(),tanggal:s[0],jamMulai:s[1],jamSelesai:s[2],bimbel:'BIC',
+      kelas:s[3],siswa:s[4],tempat:'Online',biaya:s[5],catatan:'',absen:false,
+      status:'aktif',pindahKe:null,alasanPindah:''
+    }));
+    // generate rutin Nov 2026 - Nov 2027
+    generateRutinRange(MULAI_RUTIN,AKHIR_RUTIN_DEFAULT,false);
+    save();
+  }
+  data=data.map(r=>({
+    ...r,
+    status:r.status||'aktif',
+    pindahKe:r.pindahKe||null,
+    alasanPindah:r.alasanPindah||''
+  }));
+}
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
+function saveBimbel(){localStorage.setItem(STORAGE_BIMBEL,JSON.stringify(bimbelList))}
+
+function fmtTanggal(iso){
+  if(!iso)return'—';
+  const d=new Date(iso+'T00:00:00');
+  if(isNaN(d))return iso;
+  return HARI[d.getDay()]+', '+d.getDate()+'/'+(d.getMonth()+1)+'/'+String(d.getFullYear()).slice(2);
+}
+function todayISO(){
+  const d=new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function isLewat(r){
+  const dt=new Date(r.tanggal+'T'+(r.jamMulai||'00:00'));
+  return dt < new Date();
+}
+function fmtRupiah(v){
+  const n=parseInt(String(v).replace(/\D/g,''));
+  if(!n||isNaN(n))return'—';
+  return 'Rp '+n.toLocaleString('id-ID');
+}
+function badgeClass(b){
+  return {'BIC':'b-bic','Comander':'b-comander','Kursus Pintar':'b-kursus','Brainup':'b-brainup','Talenta':'b-talenta'}[b]||'b-default';
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function getBulanKey(iso){return iso?iso.slice(0,7):''}
+
+function statusTag(r){
+  if(r.status==='batal')return '<span class="status-tag s-batal">❌ Batal</span>';
+  if(r.status==='pindah')return '<span class="status-tag s-pindah">📅 Pindah</span>';
+  return '<span class="status-tag s-aktif">✅ Aktif</span>';
+}
+
+function buildBulanList(){
+  const set=new Set(data.map(r=>getBulanKey(r.tanggal)));
+  return [...set].sort();
+}
+function updateBulanSelect(){
+  const months=buildBulanList();
+  const sel=document.getElementById('selectBulan');
+  const cur=activeBulan||'';
+  sel.innerHTML='<option value="">— Pilih Bulan —</option>'+
+    months.map(m=>{
+      const [y,mo]=m.split('-');
+      return `<option value="${m}">${BULAN[+mo-1]} ${y}</option>`;
+    }).join('');
+  sel.value=cur;
+  if(activeBulan){
+    const [y,mo]=activeBulan.split('-');
+    const cnt=data.filter(r=>getBulanKey(r.tanggal)===activeBulan).length;
+    document.getElementById('bulanLabel').innerHTML=`${BULAN[+mo-1]} ${y}<small>${cnt} jadwal bulan ini</small>`;
+  }else{
+    document.getElementById('bulanLabel').innerHTML=`Semua Bulan<small>${data.length} jadwal total</small>`;
+  }
+}
+function shiftBulan(delta){
+  const months=buildBulanList();
+  if(!months.length)return;
+  let idx=activeBulan?months.indexOf(activeBulan):-1;
+  if(idx===-1)idx=0;
+  idx+=delta;
+  if(idx<0)idx=0;
+  if(idx>=months.length)idx=months.length-1;
+  activeBulan=months[idx];
+  render();
+}
+document.getElementById('btnPrevBulan').onclick=()=>shiftBulan(-1);
+document.getElementById('btnNextBulan').onclick=()=>shiftBulan(1);
+document.getElementById('btnSemuaBulan').onclick=()=>{activeBulan=null;render()};
+document.getElementById('selectBulan').onchange=e=>{activeBulan=e.target.value||null;render()};
+
+function populateBimbelForm(){
+  const sel=document.getElementById('fBimbel');
+  sel.innerHTML='<option value="">— Pilih —</option>'+
+    bimbelList.map(b=>`<option value="${esc(b.nama)}">${esc(b.nama)}${b.biaya?' (Rp '+parseInt(b.biaya).toLocaleString('id-ID')+')':''}</option>`).join('');
+}
+
+function render(){
+  // hitung count per bimbel HANYA untuk bulan aktif (atau semua kalau aktifBulan null)
+  const monthFiltered = activeBulan
+    ? data.filter(r=>getBulanKey(r.tanggal)===activeBulan)
+    : data;
+
+  const counts={};
+  monthFiltered.forEach(r=>counts[r.bimbel]=(counts[r.bimbel]||0)+1);
+
+  const tabsEl=document.getElementById('tabs');
+  const tabList=['Semua',...bimbelList.map(b=>b.nama).filter(b=>counts[b])];
+  tabsEl.innerHTML=tabList.map(t=>{
+    const c=t==='Semua'?monthFiltered.length:(counts[t]||0);
+    return `<div class="tab ${activeTab===t?'active':''}" data-tab="${esc(t)}">${esc(t)}<span class="cnt">${c}</span></div>`;
+  }).join('');
+
+  const q=document.getElementById('search').value.toLowerCase();
+  const fa=document.getElementById('filterAbsen').value;
+  const fw=document.getElementById('filterWaktu').value;
+
+  let rows=monthFiltered.filter(r=>{
+    if(activeTab!=='Semua'&&r.bimbel!==activeTab)return false;
+    if(fa==='belum'&&(r.absen||r.status!=='aktif'))return false;
+    if(fa==='sudah'&&!r.absen)return false;
+    if(fa==='pindah'&&r.status!=='pindah')return false;
+    if(fa==='batal'&&r.status!=='batal')return false;
+    if(fw==='mendatang'&&isLewat(r))return false;
+    if(fw==='lewat'&&!isLewat(r))return false;
+    if(q){const hay=[r.kelas,r.siswa,r.bimbel,r.catatan,r.tempat].join(' ').toLowerCase();if(!hay.includes(q))return false}
+    return true;
+  });
+
+  const totalBiaya=rows.reduce((a,r)=>{
+    if(r.absen && r.status==='aktif')return a+(parseInt(String(r.biaya).replace(/\D/g,''))||0);
+    return a;
+  },0);
+  const totalSemua=rows.reduce((a,r)=>{
+    if(r.status!=='batal')return a+(parseInt(String(r.biaya).replace(/\D/g,''))||0);
+    return a;
+  },0);
+  const sudah=rows.filter(r=>r.absen&&r.status==='aktif').length;
+  const belum=rows.filter(r=>!r.absen&&r.status==='aktif').length;
+  const pindahCount=rows.filter(r=>r.status==='pindah').length;
+  const batalCount=rows.filter(r=>r.status==='batal').length;
+
+  document.getElementById('stats').innerHTML=`
+    <div class="stat-card gold"><div class="num">Rp ${totalBiaya.toLocaleString('id-ID')}</div><div class="lbl">💰 Sudah Dibayar</div></div>
+    <div class="stat-card"><div class="num">${rows.length}</div><div class="lbl">Total Jadwal</div></div>
+    <div class="stat-card green"><div class="num">${sudah}</div><div class="lbl">✅ Sudah</div></div>
+    <div class="stat-card yellow"><div class="num">${belum}</div><div class="lbl">⬜ Belum</div></div>
+    <div class="stat-card"><div class="num">${pindahCount}</div><div class="lbl">📅 Pindah</div></div>
+    <div class="stat-card"><div class="num" style="color:var(--red)">${batalCount}</div><div class="lbl">❌ Batal</div></div>
+    <div class="stat-card"><div class="num" style="font-size:1rem">Rp ${totalSemua.toLocaleString('id-ID')}</div><div class="lbl">📊 Potensi</div></div>
+  `;
+
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(sortKey==='tanggal'){va=a.tanggal+' '+a.jamMulai;vb=b.tanggal+' '+b.jamMulai}
+    else if(sortKey==='status'){va=a.status||'';vb=b.status||''}
+    else{va=a[sortKey]||'';vb=b[sortKey]||''}
+    if(va<vb)return sortDir==='asc'?-1:1;
+    if(va>vb)return sortDir==='asc'?1:-1;
+    return 0;
+  });
+
+  const tbody=document.getElementById('tbody');
+  const empty=document.getElementById('empty');
+  tbody.innerHTML='';
+  if(!rows.length){empty.style.display='block';}
+  else{
+    empty.style.display='none';
+    rows.forEach(r=>{
+      const tr=document.createElement('tr');
+      if(r.status==='batal')tr.classList.add('batal');
+      else if(r.status==='pindah')tr.classList.add('pindah');
+      else if(r.absen)tr.classList.add('done');
+      else if(isLewat(r))tr.classList.add('lewat');
+      tr.innerHTML=`
+        <td>${fmtTanggal(r.tanggal)}</td>
+        <td>${r.jamMulai||'—'}${r.jamSelesai?'–'+r.jamSelesai:''}</td>
+        <td><span class="badge ${badgeClass(r.bimbel)}">${esc(r.bimbel)}</span></td>
+        <td class="kelas">${esc(r.kelas)||'—'}</td>
+        <td>${esc(r.siswa)||'—'}</td>
+        <td>${statusTag(r)}</td>
+        <td>${fmtRupiah(r.biaya)}</td>
+        <td><button class="absen-btn ${r.absen?'done':''}" data-id="${r.id}" data-act="absen" ${r.status!=='aktif'?'disabled style="opacity:.4;cursor:not-allowed"':''}>${r.absen?'✅ Lunas':'⬜ Belum'}</button></td>
+        <td><div class="aksi-group">
+          ${r.status==='aktif'?`<button class="btn btn-sm btn-warn" data-id="${r.id}" data-act="pindah" title="Pindah jadwal">📅</button>`:''}
+          ${r.status==='aktif'?`<button class="btn btn-sm btn-danger" data-id="${r.id}" data-act="batal" title="Batalkan">❌</button>`:''}
+          ${r.status!=='aktif'?`<button class="btn btn-sm btn-ghost" data-id="${r.id}" data-act="aktifkan" title="Aktifkan lagi">↩️</button>`:''}
+          <button class="btn btn-sm btn-ghost" data-id="${r.id}" data-act="edit">✏️</button>
+          <button class="btn btn-sm btn-danger" data-id="${r.id}" data-act="hapus">🗑</button>
+        </div></td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  const mc=document.getElementById('mobileCards');
+  const em=document.getElementById('emptyMobile');
+  mc.innerHTML='';
+  if(!rows.length){em.style.display='block';}
+  else{
+    em.style.display='none';
+    rows.forEach(r=>{
+      const card=document.createElement('div');
+      card.className='m-card';
+      if(r.status==='batal')card.classList.add('batal');
+      else if(r.status==='pindah')card.classList.add('pindah');
+      else if(r.absen)card.classList.add('done');
+      card.innerHTML=`
+        <div class="m-card-top">
+          <div>
+            <div class="m-card-tgl">${fmtTanggal(r.tanggal)}</div>
+            <div class="m-card-jam">🕐 ${r.jamMulai||'—'}${r.jamSelesai?'–'+r.jamSelesai:''}</div>
+          </div>
+          ${statusTag(r)}
+        </div>
+        <div class="m-card-kelas">${esc(r.kelas)||'—'}</div>
+        <div class="m-card-meta">
+          <span class="badge ${badgeClass(r.bimbel)}">${esc(r.bimbel)}</span>
+          ${r.siswa?`<span>👤 ${esc(r.siswa)}</span>`:''}
+          <span>📍 ${esc(r.tempat)||'—'}</span>
+          <span class="biaya">💰 ${fmtRupiah(r.biaya)}</span>
+        </div>
+        ${r.alasanPindah?`<div class="hint" style="margin-bottom:6px">📝 ${esc(r.alasanPindah)}</div>`:''}
+        <div class="m-card-actions">
+          <button class="absen-btn ${r.absen?'done':''}" data-id="${r.id}" data-act="absen" ${r.status!=='aktif'?'disabled style="opacity:.4"':''}>${r.absen?'✅ Lunas':'⬜ Belum'}</button>
+          ${r.status==='aktif'?`<button class="btn btn-sm btn-warn" data-id="${r.id}" data-act="pindah">📅 Pindah</button>`:''}
+          ${r.status==='aktif'?`<button class="btn btn-sm btn-danger" data-id="${r.id}" data-act="batal">❌ Batal</button>`:''}
+          ${r.status!=='aktif'?`<button class="btn btn-sm btn-ghost" data-id="${r.id}" data-act="aktifkan">↩️ Aktifkan</button>`:''}
+          <button class="btn btn-sm btn-ghost" data-id="${r.id}" data-act="edit">✏️</button>
+          <button class="btn btn-sm btn-danger" data-id="${r.id}" data-act="hapus">🗑</button>
+        </div>`;
+      mc.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll('th[data-sort]').forEach(th=>{
+    const a=th.querySelector('.arw');
+    a.textContent=th.dataset.sort===sortKey?(sortDir==='asc'?'▲':'▼'):'';
+  });
+
+  updateBulanSelect();
+  populateBimbelForm();
+}
+
+/* ===== MODAL FORM ===== */
+const overlay=document.getElementById('overlay');
+function openModal(row){
+  document.getElementById('modalTitle').textContent=row?'✏️ Edit Jadwal':'➕ Tambah Jadwal';
+  document.getElementById('editId').value=row?row.id:'';
+  document.getElementById('fTanggal').value=row?row.tanggal:todayISO();
+  document.getElementById('fJamMulai').value=row?row.jamMulai:'';
+  document.getElementById('fJamSelesai').value=row?(row.jamSelesai||''):'';
+  populateBimbelForm();
+  document.getElementById('fBimbel').value=row?row.bimbel:'';
+  document.getElementById('fTempat').value=row?(row.tempat||'Online'):'Online';
+  document.getElementById('fKelas').value=row?row.kelas:'';
+  document.getElementById('fSiswa').value=row?row.siswa:'';
+  document.getElementById('fBiaya').value=row?row.biaya:'';
+  document.getElementById('fCatatan').value=row?(row.catatan||''):'';
+  overlay.classList.add('active');
+}
+function closeModal(){overlay.classList.remove('active')}
+document.getElementById('btnTambah').onclick=()=>openModal(null);
+document.getElementById('btnBatal').onclick=closeModal;
+overlay.onclick=e=>{if(e.target===overlay)closeModal()};
+
+document.getElementById('fBimbel').onchange=e=>{
+  const b=bimbelList.find(x=>x.nama===e.target.value);
+  const bi=document.getElementById('fBiaya');
+  if(b&&b.biaya&&!bi.value)bi.value=b.biaya;
+};
+
+document.getElementById('formJadwal').onsubmit=e=>{
+  e.preventDefault();
+  const id=document.getElementById('editId').value;
+  const existing=id?data.find(r=>r.id===id):null;
+  const row={
+    id:id||uid(),
+    tanggal:document.getElementById('fTanggal').value,
+    jamMulai:document.getElementById('fJamMulai').value,
+    jamSelesai:document.getElementById('fJamSelesai').value,
+    bimbel:document.getElementById('fBimbel').value,
+    kelas:document.getElementById('fKelas').value.trim(),
+    siswa:document.getElementById('fSiswa').value.trim(),
+    tempat:document.getElementById('fTempat').value,
+    biaya:document.getElementById('fBiaya').value.trim(),
+    catatan:document.getElementById('fCatatan').value.trim(),
+    absen:existing?existing.absen:false,
+    status:existing?existing.status:'aktif',
+    pindahKe:existing?existing.pindahKe:null,
+    alasanPindah:existing?existing.alasanPindah:''
+  };
+  if(id)data=data.map(r=>r.id===id?row:r);else data.push(row);
+  save();render();closeModal();
+};
+
+/* ===== PINDAH ===== */
+const overlayPindah=document.getElementById('overlayPindah');
+function openPindah(id){
+  const r=data.find(x=>x.id===id);
+  if(!r)return;
+  pindahTargetId=id;
+  document.getElementById('pTanggal').value=r.tanggal;
+  document.getElementById('pJamMulai').value=r.jamMulai;
+  document.getElementById('pJamSelesai').value=r.jamSelesai||'';
+  document.getElementById('pAlasan').value='';
+  overlayPindah.classList.add('active');
+}
+document.getElementById('btnPindahBatal').onclick=()=>overlayPindah.classList.remove('active');
+overlayPindah.onclick=e=>{if(e.target===overlayPindah)overlayPindah.classList.remove('active')};
+
+document.getElementById('btnPindahGo').onclick=()=>{
+  const r=data.find(x=>x.id===pindahTargetId);
+  if(!r)return;
+  const tgl=document.getElementById('pTanggal').value;
+  const jamM=document.getElementById('pJamMulai').value;
+  const jamS=document.getElementById('pJamSelesai').value;
+  const alasan=document.getElementById('pAlasan').value.trim();
+  if(!tgl||!jamM){alert('Tanggal & jam baru wajib diisi');return}
+
+  const baru={
+    id:uid(),tanggal:tgl,jamMulai:jamM,jamSelesai:jamS,
+    bimbel:r.bimbel,kelas:r.kelas+' (pindahan)',siswa:r.siswa,
+    tempat:r.tempat,biaya:r.biaya,catatan:r.catatan,
+    absen:false,status:'aktif',pindahKe:null,
+    alasanPindah:`Pindahan dari ${fmtTanggal(r.tanggal)} ${r.jamMulai}`
+  };
+  data=data.map(x=>x.id===r.id?{...x,status:'pindah',pindahKe:baru.id,alasanPindah:alasan||'Dipindahkan'}:x);
+  data.push(baru);
+  save();render();overlayPindah.classList.remove('active');
+  alert(`✅ Dipindah ke ${fmtTanggal(tgl)} ${jamM}.`);
+};
+
+/* ===== EVENT ===== */
+function handleAction(e){
+  const btn=e.target.closest('button[data-act]');
+  if(!btn)return;
+  const id=btn.dataset.id,act=btn.dataset.act;
+  if(act==='absen'){
+    data=data.map(r=>r.id===id?{...r,absen:!r.absen}:r);
+    save();render();
+  }
+  else if(act==='edit'){const row=data.find(r=>r.id===id);if(row)openModal(row)}
+  else if(act==='pindah'){openPindah(id)}
+  else if(act==='batal'){
+    if(confirm('Batalkan jadwal ini?\nTidak akan dihitung dalam total biaya.')){
+      data=data.map(r=>r.id===id?{...r,status:'batal',absen:false}:r);
+      save();render();
+    }
+  }
+  else if(act==='aktifkan'){
+    data=data.map(r=>r.id===id?{...r,status:'aktif'}:r);
+    save();render();
+  }
+  else if(act==='hapus'){
+    if(confirm('Hapus permanen jadwal ini?')){
+      data=data.filter(r=>r.id!==id);save();render();
+    }
+  }
+}
+document.getElementById('tbody').onclick=handleAction;
+document.getElementById('mobileCards').onclick=handleAction;
+
+document.getElementById('tabs').onclick=e=>{
+  const t=e.target.closest('.tab');
+  if(t){activeTab=t.dataset.tab;render()}
+};
+document.getElementById('search').oninput=render;
+document.getElementById('filterAbsen').onchange=render;
+document.getElementById('filterWaktu').onchange=render;
+
+document.querySelectorAll('th[data-sort]').forEach(th=>{
+  th.onclick=()=>{
+    const k=th.dataset.sort;
+    if(sortKey===k)sortDir=sortDir==='asc'?'desc':'asc';
+    else{sortKey=k;sortDir='asc'}
+    render();
+  };
+});
+
+/* ===== GENERATE RUTIN (bisa pilih rentang bulan) ===== */
+function generateRutinRange(dariBulan, sampaiBulan, verbose){
+  // dariBulan & sampaiBulan format 'YYYY-MM'
+  const [y1,m1]=dariBulan.split('-').map(Number);
+  const [y2,m2]=sampaiBulan.split('-').map(Number);
+  const start=new Date(y1,m1-1,1);
+  const end=new Date(y2,m2,0); // akhir bulan sampai
+  let added=0,skipped=0;
+  RUTIN.forEach(r=>{
+    for(let d=new Date(start);d<=end;d.setDate(d.getDate()+1)){
+      if(d.getDay()!==r.hari)continue;
+      const iso=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const dup=data.some(x=>x.tanggal===iso&&x.bimbel===r.bimbel&&x.kelas===r.kelas&&x.jamMulai===r.jamMulai);
+      if(dup){skipped++;continue}
+      data.push({
+        id:uid(),tanggal:iso,jamMulai:r.jamMulai,jamSelesai:r.jamSelesai,
+        bimbel:r.bimbel,kelas:r.kelas,siswa:'',tempat:r.tempat,biaya:r.biaya,
+        catatan:'',absen:false,status:'aktif',pindahKe:null,alasanPindah:''
+      });
+      added++;
+    }
+  });
+  if(verbose)alert(`✅ ${added} jadwal ditambahkan.\n⏭ ${skipped} duplikat dilewati.`);
+  return {added,skipped};
+}
+
+const overlayRutin=document.getElementById('overlayRutin');
+document.getElementById('btnRutin').onclick=()=>{
+  // set default: bulan berikut setelah data terakhir, atau bulan ini
+  const months=buildBulanList();
+  const lastMonth=months.length?months[months.length-1]:MULAI_RUTIN;
+  const [ly,lm]=lastMonth.split('-').map(Number);
+  const nextDate=new Date(ly,lm,1); // bulan setelah terakhir
+  const defDari=nextDate.getFullYear()+'-'+String(nextDate.getMonth()+1).padStart(2,'0');
+  const defSampai=nextDate.getFullYear()+'-'+String(nextDate.getMonth()+1).padStart(2,'0');
+  document.getElementById('genDari').value=defDari;
+  document.getElementById('genSampai').value=defSampai;
+
+  const list=document.getElementById('genList');
+  list.innerHTML=RUTIN.map((r,i)=>`
+    <label class="gen-item">
+      <input type="checkbox" data-idx="${i}" checked>
+      <div class="info">
+        <div class="nm">${esc(r.bimbel)} — ${esc(r.kelas)} <span style="color:var(--accent)">(${fmtRupiah(r.biaya)})</span></div>
+        <div class="dt">Setiap ${HARI[r.hari]}, ${r.jamMulai}–${r.jamSelesai}</div>
+      </div>
+    </label>`).join('');
+  overlayRutin.classList.add('active');
+};
+document.getElementById('btnRutinBatal').onclick=()=>overlayRutin.classList.remove('active');
+overlayRutin.onclick=e=>{if(e.target===overlayRutin)overlayRutin.classList.remove('active')};
+
+document.getElementById('btnRutinGo').onclick=()=>{
+  const dari=document.getElementById('genDari').value;
+  const sampai=document.getElementById('genSampai').value;
+  if(!dari||!sampai){alert('Pilih rentang bulan');return}
+  if(dari>sampai){alert('Bulan "dari" harus sebelum/sama dengan "sampai"');return}
+  const checks=[...document.querySelectorAll('#genList input[type=checkbox]:checked')];
+  if(!checks.length){alert('Pilih minimal satu.');return}
+
+  // filter RUTIN yang dicentang
+  const selected=RUTIN.filter((_,i)=>checks.some(c=>+c.dataset.idx===i));
+  const savedRutin=RUTIN.slice();
+  RUTIN.length=0;RUTIN.push(...selected);
+
+  const result=generateRutinRange(dari,sampai,false);
+
+  RUTIN.length=0;RUTIN.push(...savedRutin);
+
+  save();render();overlayRutin.classList.remove('active');
+  alert(`✅ ${result.added} jadwal ditambahkan (${dari} s/d ${sampai}).\n⏭ ${result.skipped} duplikat dilewati.`);
+};
+
+/* ===== KELOLA BIMBEL ===== */
+const overlayKelola=document.getElementById('overlayKelola');
+document.getElementById('btnKelola').onclick=()=>{renderKelola();overlayKelola.classList.add('active')};
+document.getElementById('btnKelolaTutup').onclick=()=>overlayKelola.classList.remove('active');
+overlayKelola.onclick=e=>{if(e.target===overlayKelola)overlayKelola.classList.remove('active')};
+
+function renderKelola(){
+  const list=document.getElementById('kelolaList');
+  list.innerHTML=bimbelList.map((b,i)=>`
+    <div class="kelola-item">
+      <span class="nm">${esc(b.nama)}</span>
+      <span class="by">${b.biaya?fmtRupiah(b.biaya):'—'}</span>
+      <button class="btn btn-sm btn-ghost" data-idx="${i}" data-act="editBimbel">✏️</button>
+      <button class="btn btn-sm btn-danger" data-idx="${i}" data-act="hapusBimbel">🗑</button>
+    </div>`).join('');
+}
+document.getElementById('kelolaList').onclick=e=>{
+  const btn=e.target.closest('button[data-act]');
+  if(!btn)return;
+  const idx=+btn.dataset.idx,act=btn.dataset.act;
+  if(act==='hapusBimbel'){
+    if(confirm(`Hapus bimbel "${bimbelList[idx].nama}"?`)){
+      bimbelList.splice(idx,1);saveBimbel();renderKelola();render();
+    }
+  } else if(act==='editBimbel'){
+    const b=bimbelList[idx];
+    const newNama=prompt('Nama bimbel:',b.nama);
+    if(newNama===null)return;
+    const newBiaya=prompt('Biaya default (kosongkan kalau tidak ada):',b.biaya||'');
+    if(newBiaya===null)return;
+    bimbelList[idx]={nama:newNama.trim()||b.nama,biaya:newBiaya.trim()};
+    saveBimbel();renderKelola();render();
+  }
+};
+document.getElementById('btnAddBimbel').onclick=()=>{
+  const inp=document.getElementById('newBimbel');
+  const nama=inp.value.trim();
+  if(!nama){alert('Nama tidak boleh kosong');return}
+  if(bimbelList.some(b=>b.nama.toLowerCase()===nama.toLowerCase())){alert('Sudah ada');return}
+  const biaya=prompt('Biaya default (kosongkan kalau tidak ada):','')||'';
+  bimbelList.push({nama,biaya:biaya.trim()});
+  saveBimbel();inp.value='';renderKelola();render();
+};
+
+/* ===== EXPORT / IMPORT ===== */
+document.getElementById('btnExport').onclick=()=>{
+  const payload={data,bimbel:bimbelList,exported:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='jadwal-ngajar-'+todayISO()+'.json';
+  a.click();URL.revokeObjectURL(url);
+};
+document.getElementById('btnImport').onclick=()=>document.getElementById('fileImport').click();
+document.getElementById('fileImport').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const rd=new FileReader();
+  rd.onload=ev=>{
+    try{
+      const p=JSON.parse(ev.target.result);
+      let newData=[],newBimbel=null;
+      if(Array.isArray(p)){newData=p;}
+      else if(p&&Array.isArray(p.data)){newData=p.data;newBimbel=p.bimbel||null;}
+      else throw new Error('Format tidak dikenali');
+      if(!confirm(`Import ${newData.length} jadwal? Data lama DIGANTI.`))return;
+      data=newData.map(r=>({...r,status:r.status||'aktif',pindahKe:r.pindahKe||null,alasanPindah:r.alasanPindah||''}));
+      if(newBimbel&&Array.isArray(newBimbel)){bimbelList=newBimbel;saveBimbel();}
+      save();render();
+    }catch(err){alert('Gagal import: '+err.message)}
+  };
+  rd.readAsText(f);e.target.value='';
+};
+
+load();
+(function(){
+  const months=buildBulanList();
+  if(months.length)activeBulan=months[0];
+})();
+render();
+</script>
+</body>
+</html>
